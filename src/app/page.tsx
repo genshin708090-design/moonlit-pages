@@ -5,6 +5,8 @@ import Footer from '@/components/Footer'
 import BookCard from '@/components/BookCard'
 import { supabase } from '@/lib/supabase'
 
+export const revalidate = 0
+
 async function getBooks() {
   const { data } = await supabase
     .from('books')
