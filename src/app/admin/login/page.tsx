@@ -1,50 +1,48 @@
-import Navbar from '@/components/Navbar'
-import Hero from '@/components/Hero'
-import Featured from '@/components/Featured'
-import Footer from '@/components/Footer'
-import BookCard from '@/components/BookCard'
+'use client'
+import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
-async function getBooks() {
-  const { data } = await supabase
-    .from('books')
-    .select('*')
-    .order('created_at', { ascending: false })
-  return data || []
-}
+export default function LoginPage() {
+  const router = useRouter()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-export default async function Home() {
-  const books = await getBooks()
+  async function handleLogin() {
+    setLoading(true)
+    setError('')
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      setError('❌ ' + error.message)
+      setLoading(false)
+    } else {
+      router.push('/admin')
+    }
+  }
+
+  const inputClass = 'w-full rounded-2xl border border-white/10 bg-zinc-800 p-4 text-white placeholder-zinc-500 focus:border-amber-300/40 focus:outline-none transition'
 
   return (
-    <main className="min-h-screen bg-black text-white">
-      <Navbar />
-      <Hero />
-      <div className="px-6">
-        <Featured />
-      </div>
-      <section id="library" className="mx-auto max-w-7xl px-6 pb-24">
-        <div className="mb-10 flex items-center justify-between">
-          <div>
-            <div className="mb-2 text-sm uppercase tracking-widest text-amber-300">Library</div>
-            <h2 className="text-5xl font-black">Explore Novels</h2>
-          </div>
-          <div className="text-zinc-500">{books.length} books</div>
+    <main className="flex min-h-screen items-center justify-center bg-black px-6">
+      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-zinc-900 p-10">
+        <div className="mb-8 text-center">
+          <div className="mb-2 text-3xl font-black text-amber-300">🌙 Moonlit Pages</div>
+          <p className="text-zinc-500 text-sm">Admin access only</p>
         </div>
-        {books.length === 0 ? (
-          <div className="py-20 text-center text-zinc-600">
-            <div className="mb-4 text-6xl">🌙</div>
-            <p className="text-xl">No books yet. Check back soon.</p>
-          </div>
-        ) : (
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {books.map((book: any) => (
-              <BookCard key={book.id} book={book} />
-            ))}
-          </div>
-        )}
-      </section>
-      <Footer />
+        <div className="space-y-4">
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Admin email" className={inputClass} />
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className={inputClass} onKeyDown={(e) => e.key === 'Enter' && handleLogin()} />
+          {error && <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">{error}</div>}
+          <button onClick={handleLogin} disabled={loading} className="w-full rounded-2xl bg-amber-300 py-4 font-bold text-black transition hover:opacity-90 disabled:opacity-50">
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+        </div>
+        <div className="mt-6 text-center">
+          <a href="/" className="text-sm text-zinc-600 hover:text-amber-300 transition">← Back to site</a>
+        </div>
+      </div>
     </main>
   )
 }
