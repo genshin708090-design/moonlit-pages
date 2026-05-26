@@ -3,11 +3,25 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: #050505;
+  background: #070711;
   color: white;
+  font-family: 'Inter', sans-serif;
 }
 
 ::selection {
-  background: #f6d06f;
-  color: black;
+  background: #a78bfa;
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f0f1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3b3b6b;
+  border-radius: 999px;
 }
