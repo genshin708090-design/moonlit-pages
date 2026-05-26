@@ -1,4 +1,4 @@
-"use client"
+ï»¿"use client"
 import { motion } from "framer-motion"
 
 export default function Hero() {
@@ -14,7 +14,9 @@ export default function Hero() {
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(80)].map((_, i) => (
-          <div key={i} className="absolute rounded-full bg-white"
+          <div
+            key={i}
+            className="absolute rounded-full bg-white"
             style={{
               width: Math.random() > 0.8 ? "2px" : "1px",
               height: Math.random() > 0.8 ? "2px" : "1px",
@@ -27,7 +29,11 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-5xl px-6 text-center pt-28 pb-20">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
           <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-violet-400/20 bg-violet-400/[0.08] px-5 py-2.5 text-sm text-violet-300 backdrop-blur-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse shadow-lg shadow-violet-400/50" />
             <span className="font-medium">Premium Digital Library</span>
@@ -40,7 +46,10 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="mb-6 font-black leading-[1.05] tracking-tight"
         >
-          <span className="block text-5xl md:text-7xl lg:text-8xl text-white mb-2">Where Every</span>
+          <span className="block text-5xl md:text-7xl lg:text-8xl text-white mb-2">
+            Where Every
+          </span>
+
           <span className="block text-5xl md:text-7xl lg:text-8xl bg-gradient-to-r from-violet-400 via-purple-300 to-indigo-300 bg-clip-text text-transparent">
             Page Glows
           </span>
@@ -52,7 +61,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mx-auto mb-12 max-w-xl text-lg text-zinc-400 leading-relaxed"
         >
-          Dive into handpicked novels, cinematic stories, and unforgettable worlds ¡ª all free to read and download.
+          Dive into handpicked novels, cinematic stories, and unforgettable worlds - all free to read and download.
         </motion.p>
 
         <motion.div
@@ -61,12 +70,22 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <a href="#library" className="group relative w-full sm:w-auto overflow-hidden rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 font-bold text-white shadow-2xl shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300 hover:scale-[1.02]">
+          <a
+            href="#library"
+            className="group relative w-full sm:w-auto overflow-hidden rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 font-bold text-white shadow-2xl shadow-violet-500/30 hover:shadow-violet-500/50 transition-all duration-300 hover:scale-[1.02]"
+          >
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <span className="relative flex items-center justify-center gap-2">?? Start Reading</span>
+
+            <span className="relative flex items-center justify-center gap-2">
+              Start Reading
+            </span>
           </a>
-          <a href="#featured" className="w-full sm:w-auto rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm px-8 py-4 font-semibold text-white hover:border-violet-400/30 hover:bg-white/[0.08] transition-all duration-300">
-            ? Browse Featured
+
+          <a
+            href="#featured"
+            className="w-full sm:w-auto rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm px-8 py-4 font-semibold text-white hover:border-violet-400/30 hover:bg-white/[0.08] transition-all duration-300"
+          >
+            Browse Featured
           </a>
         </motion.div>
 
@@ -76,10 +95,17 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.6 }}
           className="mt-20 grid grid-cols-3 gap-8 max-w-sm mx-auto"
         >
-          {[["¡Þ", "Free Books"], ["??", "Read Anytime"], ["?", "Download Free"]].map(([icon, label]) => (
+          {[
+            ["Infinity", "Free Books"],
+            ["Read", "Read Anytime"],
+            ["Download", "Download Free"],
+          ].map(([icon, label]) => (
             <div key={label} className="text-center">
               <div className="text-xl mb-1.5">{icon}</div>
-              <div className="text-[11px] text-zinc-600 uppercase tracking-widest font-medium">{label}</div>
+
+              <div className="text-[11px] text-zinc-600 uppercase tracking-widest font-medium">
+                {label}
+              </div>
             </div>
           ))}
         </motion.div>
