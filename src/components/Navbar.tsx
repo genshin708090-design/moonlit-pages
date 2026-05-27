@@ -34,12 +34,14 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-500 hover:border-violet-500/30 transition-all cursor-pointer">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <span>Search books...</span>
-          </div>
+          
+            href="https://buymeacoffee.com/genshin7086"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm font-semibold text-yellow-300 hover:bg-yellow-500/20 hover:border-yellow-400/40 transition-all duration-300"
+          >
+            Support Us
+          </a>
           <a href="#library" className="rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition shadow-lg shadow-violet-500/20">
             Start Reading
           </a>
@@ -59,7 +61,10 @@ export default function Navbar() {
               {item}
             </a>
           ))}
-          <div className="pt-3 border-t border-white/5">
+          <div className="pt-3 border-t border-white/5 space-y-2">
+            <a href="https://buymeacoffee.com/genshin7086" target="_blank" rel="noopener noreferrer" className="block text-center rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm font-semibold text-yellow-300">
+              Support Us
+            </a>
             <a href="#library" className="block text-center rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 px-4 py-3 text-sm font-semibold text-white">
               Start Reading
             </a>

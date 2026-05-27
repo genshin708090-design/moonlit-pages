@@ -12,9 +12,21 @@ export default function Footer() {
                 <span className="text-lg font-black italic text-white/90 ml-1">Pages</span>
               </div>
             </div>
-            <p className="text-zinc-500 text-sm leading-7 max-w-xs">
+            <p className="text-zinc-500 text-sm leading-7 max-w-xs mb-6">
               A cinematic digital sanctuary for readers who love to get lost in extraordinary worlds. Free forever.
             </p>
+            
+              href="https://buymeacoffee.com/genshin7086"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 rounded-2xl border border-yellow-500/30 bg-yellow-500/10 px-5 py-3 text-sm font-semibold text-yellow-300 hover:bg-yellow-500/20 hover:border-yellow-400/50 transition-all duration-300 hover:scale-[1.02]"
+            >
+              <span className="text-lg">?</span>
+              <div>
+                <div className="text-yellow-300 font-bold text-sm">Buy Me a Coffee</div>
+                <div className="text-yellow-500/70 text-xs">Support Moonlit Pages</div>
+              </div>
+            </a>
           </div>
 
           <div>
@@ -42,7 +54,7 @@ export default function Footer() {
 
         <div className="border-t border-white/[0.06] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-zinc-600">? {new Date().getFullYear()} Moonlit Pages. All rights reserved.</p>
-          <p className="text-xs text-zinc-600">Made with ?? for readers everywhere</p>
+          <p className="text-xs text-zinc-600">Made with love for readers everywhere</p>
         </div>
       </div>
     </footer>
