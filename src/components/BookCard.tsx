@@ -27,11 +27,10 @@ export default function BookCard({ book }: { book: Book }) {
           alt={book.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c1a] via-[#0c0c1a]/20 to-transparent opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c1a] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-4">
           {book.epub_url && (
             <a href={book.epub_url} download className="w-full rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-2.5 text-center text-sm font-bold text-white shadow-lg shadow-violet-500/30 hover:opacity-90 transition">
-              ? Download Free
+              Download Free
             </a>
           )}
         </div>
@@ -47,7 +46,7 @@ export default function BookCard({ book }: { book: Book }) {
         <p className="text-xs leading-5 text-zinc-600 line-clamp-2 flex-1">{book.description}</p>
         {book.epub_url && (
           <a href={book.epub_url} download className="mt-3 text-xs text-violet-400 hover:text-violet-300 transition font-medium">
-            Download ¡ú
+            Download
           </a>
         )}
       </div>
