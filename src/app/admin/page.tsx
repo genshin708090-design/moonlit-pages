@@ -12,6 +12,9 @@ interface Book {
   cover_url: string
   epub_url: string
   created_at: string
+  series_title: string
+  chapter_range: string
+  volume_order: number
 }
 
 export default function AdminPage() {
@@ -25,6 +28,9 @@ export default function AdminPage() {
   const [description, setDescription] = useState("")
   const [coverUrl, setCoverUrl] = useState("")
   const [epubUrl, setEpubUrl] = useState("")
+  const [seriesTitle, setSeriesTitle] = useState("")
+  const [chapterRange, setChapterRange] = useState("")
+  const [volumeOrder, setVolumeOrder] = useState(1)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [activeTab, setActiveTab] = useState("add")
@@ -54,6 +60,9 @@ export default function AdminPage() {
     setDescription(book.description || "")
     setCoverUrl(book.cover_url || "")
     setEpubUrl(book.epub_url || "")
+    setSeriesTitle(book.series_title || "")
+    setChapterRange(book.chapter_range || "")
+    setVolumeOrder(book.volume_order || 1)
     setActiveTab("add")
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
@@ -61,22 +70,31 @@ export default function AdminPage() {
   function cancelEdit() {
     setEditingBook(null)
     setTitle(""); setAuthor(""); setDescription(""); setCoverUrl(""); setEpubUrl("")
+    setSeriesTitle(""); setChapterRange(""); setVolumeOrder(1)
     setGenre("Fantasy")
   }
 
   async function handleSubmit() {
     if (!title || !author) { setMessage("Title and author are required."); return }
     setLoading(true); setMessage("")
+    const payload = {
+      title, author, genre, description,
+      cover_url: coverUrl,
+      epub_url: epubUrl,
+      series_title: seriesTitle || null,
+      chapter_range: chapterRange || null,
+      volume_order: volumeOrder || 1,
+    }
     if (editingBook) {
-      const { error } = await supabase.from("books").update({ title, author, genre, description, cover_url: coverUrl, epub_url: epubUrl }).eq("id", editingBook.id)
+      const { error } = await supabase.from("books").update(payload).eq("id", editingBook.id)
       setLoading(false)
       if (error) { setMessage("Error: " + error.message) }
       else { setMessage("Book updated!"); cancelEdit(); fetchBooks() }
     } else {
-      const { error } = await supabase.from("books").insert({ title, author, genre, description, cover_url: coverUrl, epub_url: epubUrl })
+      const { error } = await supabase.from("books").insert(payload)
       setLoading(false)
       if (error) { setMessage("Error: " + error.message) }
-      else { setMessage("Book added!"); setTitle(""); setAuthor(""); setDescription(""); setCoverUrl(""); setEpubUrl(""); fetchBooks() }
+      else { setMessage("Book added!"); cancelEdit(); fetchBooks() }
     }
   }
 
@@ -110,8 +128,8 @@ export default function AdminPage() {
 
         <div className="grid grid-cols-3 gap-4 mb-10">
           {[
-            { label: "Total Books", value: books.length, icon: "??" },
-            { label: "Latest Added", value: books[0]?.title?.slice(0, 15) + "..." || "None", icon: "?" },
+            { label: "Total Volumes", value: books.length, icon: "??" },
+            { label: "Latest Added", value: books[0]?.title?.slice(0, 12) + "..." || "None", icon: "?" },
             { label: "Genres", value: [...new Set(books.map(b => b.genre))].length, icon: "??" },
           ].map((stat) => (
             <div key={stat.label} className="rounded-2xl border border-white/5 bg-white/[0.02] p-5">
@@ -139,6 +157,17 @@ export default function AdminPage() {
                 <button onClick={cancelEdit} className="text-xs text-zinc-500 hover:text-white transition">Cancel</button>
               </div>
             )}
+
+            <div className="mb-6 rounded-2xl border border-violet-500/10 bg-violet-500/5 p-5">
+              <div className="text-xs font-bold text-violet-400 uppercase tracking-widest mb-4">Series Info (for multi-volume books)</div>
+              <div className="grid md:grid-cols-3 gap-4">
+                <input value={seriesTitle} onChange={(e) => setSeriesTitle(e.target.value)} placeholder="Series title e.g. Martial Peak" className={inputClass} />
+                <input value={chapterRange} onChange={(e) => setChapterRange(e.target.value)} placeholder="Chapter range e.g. 1000-2000" className={inputClass} />
+                <input type="number" value={volumeOrder} onChange={(e) => setVolumeOrder(Number(e.target.value))} placeholder="Volume order e.g. 1" className={inputClass} />
+              </div>
+              <p className="text-xs text-zinc-600 mt-3">Fill these only if this book is part of a series. Leave empty for standalone books.</p>
+            </div>
+
             <div className="grid md:grid-cols-2 gap-5">
               <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Book title *" className={inputClass} />
               <input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="Author *" className={inputClass} />
@@ -150,13 +179,15 @@ export default function AdminPage() {
               <input value={epubUrl} onChange={(e) => setEpubUrl(e.target.value)} placeholder="EPUB download URL" className={inputClass} />
               <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" className={`${inputClass} min-h-[120px] resize-none`} />
             </div>
+
             {message && (
               <div className={`mt-5 rounded-2xl border p-4 text-sm ${message.includes("Error") ? "border-red-500/20 bg-red-500/10 text-red-400" : "border-violet-500/20 bg-violet-500/10 text-violet-300"}`}>
-                {message.includes("Error") ? "? " : "? "}{message}
+                {message.includes("Error") ? "Error: " : "Done: "}{message}
               </div>
             )}
+
             <button onClick={handleSubmit} disabled={loading} className="mt-5 w-full rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 py-4 font-bold text-white transition hover:opacity-90 disabled:opacity-50">
-              {loading ? "Saving..." : editingBook ? "?? Save Changes" : "?? Add Book"}
+              {loading ? "Saving..." : editingBook ? "Save Changes" : "Add Book"}
             </button>
           </div>
         )}
@@ -174,12 +205,16 @@ export default function AdminPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-bold text-white truncate">{book.title}</h3>
                   <p className="text-sm text-zinc-500">by {book.author}</p>
-                  <span className="mt-1 inline-block rounded-full bg-violet-500/10 border border-violet-500/20 px-2.5 py-0.5 text-xs text-violet-400">{book.genre}</span>
+                  <div className="flex items-center gap-2 mt-1 flex-wrap">
+                    <span className="rounded-full bg-violet-500/10 border border-violet-500/20 px-2.5 py-0.5 text-xs text-violet-400">{book.genre}</span>
+                    {book.series_title && <span className="rounded-full bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 text-xs text-blue-400">Series: {book.series_title}</span>}
+                    {book.chapter_range && <span className="rounded-full bg-green-500/10 border border-green-500/20 px-2.5 py-0.5 text-xs text-green-400">Ch. {book.chapter_range}</span>}
+                  </div>
                 </div>
                 <div className="text-xs text-zinc-600 hidden md:block">{new Date(book.created_at).toLocaleDateString()}</div>
                 <div className="flex gap-2 flex-shrink-0">
-                  <button onClick={() => startEdit(book)} className="rounded-xl border border-white/10 px-3 py-2 text-xs text-zinc-400 hover:text-violet-300 hover:border-violet-500/30 transition">?? Edit</button>
-                  <button onClick={() => deleteBook(book.id)} className="rounded-xl border border-red-500/20 px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 transition">???</button>
+                  <button onClick={() => startEdit(book)} className="rounded-xl border border-white/10 px-3 py-2 text-xs text-zinc-400 hover:text-violet-300 hover:border-violet-500/30 transition">Edit</button>
+                  <button onClick={() => deleteBook(book.id)} className="rounded-xl border border-red-500/20 px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 transition">Del</button>
                 </div>
               </div>
             ))}
